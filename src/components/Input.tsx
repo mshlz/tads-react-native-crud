@@ -9,7 +9,7 @@ export const Input = (props: InputProps) => {
     return <View style={styles.container}>
         {props.label && <Text style={styles.label}>{props.label}</Text>}
         <TextInput
-            style={styles.input}
+            style={[styles.input, props.error && { borderColor: 'red' }]}
             {...props}
         />
         {props.error && <Text style={styles.error}>{props.error}</Text>}
