@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import { Button, Modal, StyleSheet, View } from "react-native"
+import { Alert, AlertButton, Button, Modal, Pressable, StyleSheet, Text, View } from "react-native"
+import { Database } from "../../db/Database"
 import { Contact } from "../../models/Contact"
 import { ContactService } from "../../services/ContactService"
 import { ContactForm } from "./components/ContactForm"
@@ -24,7 +25,23 @@ export const ContactsPage: React.FC = (props) => {
         setModalVisible(true)
     }
 
-    return <View>
+    const resetDatabase = () => {
+        const btns: AlertButton[] = [
+            {
+                text: 'Yes',
+                onPress: () => {
+                    Database.initDb(true).then(() => loadContacts())
+                }
+            },
+            { text: 'Cancel' }
+        ]
+
+        Alert.alert('Recreate database?', undefined, btns)
+    }
+
+    return <View style={styles.container}>
+        <Text style={styles.title}>Contact App</Text>
+
         <ContactList
             contacts={contacts}
             onSelectContact={c => openModal(c)}
@@ -32,6 +49,13 @@ export const ContactsPage: React.FC = (props) => {
         />
 
         <Button title="Add contato" onPress={() => openModal()} />
+
+        <Pressable 
+            style={styles.resetDbBtn}
+            onPress={() => resetDatabase()}
+        >
+            <Text>Reset database</Text>
+        </Pressable>
 
         <Modal
             animationType="slide"
@@ -55,6 +79,13 @@ export const ContactsPage: React.FC = (props) => {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        padding: 10
+    },
+    title: {
+        fontSize: 26,
+        marginBottom: 16
+    },
     modalBackground: {
         flex: 1,
         justifyContent: 'center',
@@ -75,5 +106,11 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 4,
         elevation: 5,
+    },
+    resetDbBtn: {
+        backgroundColor: 'red',
+        padding: 5,
+        borderRadius: 2,
+        marginTop: 25
     }
 });
