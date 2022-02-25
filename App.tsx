@@ -1,13 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import { Database } from './src/db/Database';
+import { ContactsPage } from './src/pages/Contact/ContactPage';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+
+  Database.initDb(!true)
+
+  return <View>
+    <StatusBar style='inverted' translucent={false}/>
+    <ContactsPage />
+  </View>
 }
 
 const styles = StyleSheet.create({
